@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "Movies";
+    if (ViewBag.Person != null)
+    {
+        if (ViewBag.PersonRoles is string[])
+        {
+            ViewBag.Description = String.Join(", ", ViewBag.PersonRoles as string[]);
+        }
+        else
+        {
+            ViewBag.Description = String.Format("The movies of {0}", ViewBag.Person);
+        }
+    }
+}
+
+<div>
+    @if (ViewBag.Person != null)
+    {
+        if (ViewBag.Role != null)
+        {
+            string backLink = String.Format("all {0} movies", ViewBag.Person);
+            <h1>@ViewBag.Person (@ViewBag.Role)</h1>
+            <a asp-route="MoviesPerson" asp-route-person="@ViewBag.Person" asp-route-sort="@ViewBag.Sort">@backLink</a>
+        }
+        else if (ViewBag.Country != null)
+        {
+            string backLink = String.Format("all {0} movies", ViewBag.Person);
+            <h1>@ViewBag.Person (@ViewBag.Country)</h1>
+            <a asp-route="MoviesPerson" asp-route-person="@ViewBag.Person" asp-route-sort="@ViewBag.Sort">@backLink</a>
+        }
+        else
+        {
+            <h1>@ViewBag.Person</h1>
+
+            if (ViewBag.PersonRoles is string[] roles)
+            {
+                <ul class="person-roles">
+                    @foreach (string role in roles)
+                    {
+                        <li>
+                            <a asp-route="MoviesPersonRole" asp-route-person="@ViewBag.Person" asp-route-role="@role">@role</a>
+                        </li>
+                    }
+                </ul>
+            }
+
+            @Html.RouteLink("back to movies", "MoviesPage", new { page = 1, sort = ViewBag.Sort }, new { })
+        }
+    }
+    else if (ViewBag.Country != null)
+    {
+        <h1>Movies from @ViewBag.Country</h1>
+        <a asp-route="MoviesCountry" asp-route-country="@ViewBag.Country.ToString()" asp-route-sort="@ViewBag.Sort">view all movies</a>
+    }
+    else if (ViewBag.Year as int? != null)
+    {
+        <h1>Movies from @ViewBag.Year.ToString()</h1>
+        <a asp-route="MoviesYear" asp-route-year="@ViewBag.Year.ToString()" asp-route-sort="@ViewBag.Sort">view all movies</a>
+    }
+    else
+    {
+        <h1>Movies</h1>
+    }
+</div>
+
+<div>
+    <ul>
+        <li><a asp-action="Index" asp-route-person="Shinya Tsukamoto">Shinya Tsukamoto</a></li>
+        <li><a asp-action="Index" asp-route-person="Tsui Hark">Tsui Hark</a></li>
+        <li><a asp-action="Index" asp-route-country="Hong Kong">Hong Kong</a></li>
+        <li><a asp-action="Index" asp-route-country="Japan">Japan</a></li>
+        <li><a asp-action="Index" asp-route-country="South Korea">South Korea</a></li>
+        @for (int i = 1; i <= 10; ++i)
+        {
+            <li><a asp-action="Index" asp-route-page="@i">Page @i</a></li>
+        }
+    </ul>
+</div>
+
