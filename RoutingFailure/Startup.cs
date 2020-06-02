@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RoutingFailure.Data;
 
 namespace RoutingFailure
 {
@@ -69,30 +71,6 @@ namespace RoutingFailure
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "SearchResults",
-                    pattern: "Search/{term}/{page}",
-                    defaults: new { controller = "Home", action = "Search", page = 1 }
-                );
-
-                endpoints.MapControllerRoute(
-                    name: "AutocompleteResults",
-                    pattern: "Autocomplete/{q}/{MaxResults}",
-                    defaults: new { controller = "Home", action = "Autocomplete", MaxResults = 10 }
-                );
-
-                endpoints.MapControllerRoute(
-                    name: "ReviewsPage",
-                    pattern: "Reviews/{page}",
-                    defaults: new { controller = "Review", action = "Index", page = 1 }
-                );
-
-                endpoints.MapControllerRoute(
-                    name: "Review",
-                    pattern: "Review/{id}/{action=Details}",
-                    defaults: new { controller = "Reviews", action = "Details" }
-                    );
-
                 endpoints.MapControllerRoute(
                     name: "MoviesPersonRoleCountryYear",
                     pattern: "Person/{person}-{role}/Country/{country}/Year/{year}/{page}",
@@ -169,24 +147,24 @@ namespace RoutingFailure
         /// </summary>
         private static void ConfigureAuthentication(IServiceCollection services)
         {
-            //services.AddIdentity<IdentityUser, IdentityRole>(options =>
-            //{
-            //    options.User = new UserOptions() { RequireUniqueEmail = true };
-            //    options.Password = new PasswordOptions()
-            //    {
-            //        RequiredLength = 10,
-            //        RequiredUniqueChars = 4,
-            //        RequireDigit = false,
-            //        RequireLowercase = false,
-            //        RequireNonAlphanumeric = false,
-            //        RequireUppercase = false
-            //    };
-            //})
-            //.AddRoles<IdentityRole>()
-            //.AddEntityFrameworkStores<IdentityContext>()
-            //.AddRoleManager<RoleManager<IdentityRole>>()
-            //.AddDefaultTokenProviders()
-            //.AddDefaultUI()
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                options.User = new UserOptions() { RequireUniqueEmail = true };
+                options.Password = new PasswordOptions()
+                {
+                    RequiredLength = 10,
+                    RequiredUniqueChars = 4,
+                    RequireDigit = false,
+                    RequireLowercase = false,
+                    RequireNonAlphanumeric = false,
+                    RequireUppercase = false
+                };
+            })
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<IdentityContext>()
+            .AddRoleManager<RoleManager<IdentityRole>>()
+            .AddDefaultTokenProviders()
+            //.AddDefaultUI()           // UNCOMMENTING THIS LINE BREAKS CUSTOM ENDPOINTS
             ;
         }
     }
