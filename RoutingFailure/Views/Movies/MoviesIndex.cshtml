@@ -64,12 +64,22 @@
 </div>
 
 <div>
+    @if (ViewBag.Person == null)
+    {
+        <ul>
+            <li><a asp-action="Index" asp-route-person="Shinya Tsukamoto">Shinya Tsukamoto</a></li>
+            <li><a asp-action="Index" asp-route-person="Tsui Hark">Tsui Hark</a></li>
+        </ul>
+    }
+    @if (ViewBag.Country == null)
+    {
+        <ul>
+            <li><a asp-action="Index" asp-route-country="Hong Kong">Hong Kong</a></li>
+            <li><a asp-action="Index" asp-route-country="Japan">Japan</a></li>
+            <li><a asp-action="Index" asp-route-country="South Korea">South Korea</a></li>
+        </ul>
+    }
     <ul>
-        <li><a asp-action="Index" asp-route-person="Shinya Tsukamoto">Shinya Tsukamoto</a></li>
-        <li><a asp-action="Index" asp-route-person="Tsui Hark">Tsui Hark</a></li>
-        <li><a asp-action="Index" asp-route-country="Hong Kong">Hong Kong</a></li>
-        <li><a asp-action="Index" asp-route-country="Japan">Japan</a></li>
-        <li><a asp-action="Index" asp-route-country="South Korea">South Korea</a></li>
         @for (int i = 1; i <= 10; ++i)
         {
             <li><a asp-action="Index" asp-route-page="@i">Page @i</a></li>
